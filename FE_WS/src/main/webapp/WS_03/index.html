@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/footer.css">
+  <style>
+
+    #main {
+      margin-top: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #main .main-item {
+      display: inline-block;
+      width: 33%;
+    }
+
+    #main .main-item img{
+      width: 100%;
+    } 
+    
+    #main .main-item h2{
+      margin-top: 5px;
+    } 
+
+    #main .main-item p{
+      margin-top: 5px;
+    }
+
+    #main .main-item button{
+      margin-top: 5px;
+      padding: 5px;
+      float: right;
+      width: 80px;
+      font-size: 18px;
+    }
+
+
+  </style>
+  <title>IT's KB</title>
+</head>
+<body>
+  <div id="container">
+    <div id="navbar">
+      <ul>
+        <li class="nav-item logo"><img src="logo.jpg" alt=""></li>
+        <li class="nav-item"><a href="personal.html">개인</a></li>
+        <li class="nav-item"><a href="busines.html">기업</a></li>
+        <li class="nav-item">로그인</li>
+        <li class="nav-item">회원가입</li>
+      </ul>
+    </div>
+    <div id="banner"></div>
+    <div id="main">
+      <div class="main-item" data-main-item-id="10">
+        <img src="https://picsum.photos/200" alt="">
+        <h2>main-item 1</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <button class="main-item-btn">button 1</button>
+      </div>
+      <div class="main-item" data-main-item-id="20">
+        <img src="https://picsum.photos/200" alt="">
+        <h2>main-item 2</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <button class="main-item-btn">button 2</button>
+      </div>
+      <div class="main-item" data-main-item-id="30">
+        <img src="https://picsum.photos/200" alt="">
+        <h2>main-item 3</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+        <button class="main-item-btn">button 3</button>
+      </div>
+    </div>
+    <div id="footer">
+      <ul>
+        <li class="address">12345 address 1 address 2 address 3</li>
+        <li class="phone">02-0000-0000</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    // #1. bannerList.json 을 이용해서 banner 를 주기적으로 변경한다. (5초)
+    // #2. main 의 main-item class 에 data-main-item-id 를 추가하고 각 버튼에 main-item-btn class 를 추가한다.
+    //     각 버튼을 click 하면 data-main-item-id 의 값을 console.log() 로 출력한다.
+
+    let bannerList = [];
+    let bannerIndex = 0;
+
+    window.onload = async function(){
+      let response = await fetch("./bannerList.json");
+      let { banners } = await response.json(); // destructuring
+      bannerList = banners;
+
+      // 첫 번쩨 banner 로 초기화
+      let banner = document.querySelector("#banner");
+	 let bannerText = bannerList[bannerIndex].bannerText;
+      banner.innerText = bannerText;
+      bannerIndex++;
+
+      // 주기적으로 update
+      setInterval( changeBanner, 5000 );
+
+      
+      document.querySelectorAll("#main .main-item-btn").forEach( btn => btn.onclick = function(){
+
+        let dataMainItemId = this.closest(".main-item").attributes["data-main-item-id"].value;
+        console.log( dataMainItemId );
+      });
+    }
+    
+    
+
+		function changeBanner(){
+
+		  let banner = document.querySelector("#banner");
+		  let bannerText = bannerList[bannerIndex].bannerText;
+		  banner.innerText = bannerText;
+		  bannerIndex++;
+		  if( bannerIndex == 4 ) bannerIndex = 0;
+		}
+  </script>
+</body>
+</html>
